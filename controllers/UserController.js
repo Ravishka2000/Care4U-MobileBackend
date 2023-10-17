@@ -70,7 +70,12 @@ const loginUser = asyncHandler(async (req, res) => {
             email: user.email,
             userName: user.userName,
         };
-        res.status(200).json({ message: "Login successful" });
+        const response = {
+            message: "Login successful",
+            isCaretaker: user.isCaretaker // Assuming the user has an "isCaretaker" property
+        };
+
+        res.status(200).json(response);
     } else {
         res.status(401);
         throw new Error("Invalid email or password");
