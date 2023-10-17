@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import bcrypt from "bcrypt";
 
 const Schema = mongoose.Schema;
 
@@ -32,11 +33,16 @@ const userSchema = new Schema({
         type: String,
         required: true,
     },
+    caretaker: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "CareTaker",
+    },
     isCaretaker:{
         type: Boolean
     },
 
 });  
+
 
 const User = mongoose.model("User", userSchema);
 export default User;
