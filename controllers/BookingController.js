@@ -18,12 +18,18 @@ const createBooking = asyncHandler(async (req, res) => {
 });
 
 const getBookings = asyncHandler(async (req, res) => {
-    const bookings = await Booking.find({});
+    const bookings = await Booking.find({})
+        .populate('user')       // Populate the 'user' field
+        .populate('caretaker'); // Populate the 'caretaker' field
+
     res.json(bookings);
 });
 
+
 const getBookingById = asyncHandler(async (req, res) => {
-    const booking = await Booking.findById(req.params.id);
+    const booking = await Booking.findById(req.params.id)
+        .populate('user')       // Populate the 'user' field
+        .populate('caretaker'); // Populate the 'caretaker' field
 
     if (booking) {
         res.json(booking);
@@ -32,6 +38,7 @@ const getBookingById = asyncHandler(async (req, res) => {
         throw new Error("Booking not found");
     }
 });
+
 
 const updateBooking = asyncHandler(async (req, res) => {
     const { user, caretaker, startDate, endDate, status } = req.body;
