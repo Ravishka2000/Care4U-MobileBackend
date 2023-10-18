@@ -74,10 +74,30 @@ const deleteBooking = asyncHandler(async (req, res) => {
     }
 });
 
+const acceptBooking = asyncHandler(async (req, res) => {
+    const booking = await Booking.findById(req.params.id);
+
+    if (booking) {
+        if (req.body.accepted) {
+            booking.status = "Confirmed"; // Set status to "Confirmed" when accepted
+        } else {
+            booking.status = "Cancelled"; // Set status to "Pending" when rejected
+        }
+
+        const updatedBooking = await booking.save();
+        res.json(updatedBooking);
+    } else {
+        res.status(404);
+        throw new Error("Booking not found");
+    }
+});
+
+
 export default {
     createBooking,
     getBookings,
     getBookingById,
     updateBooking,
     deleteBooking,
+    acceptBooking
 };

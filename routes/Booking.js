@@ -15,6 +15,8 @@ router.get("/:id", BookingController.getBookingById);
 // Update a booking by ID
 router.put("/:id", BookingController.updateBooking);
 
+router.patch("/:id/accept", BookingController.acceptBooking);
+
 // Delete a booking by ID
 router.delete("/:id", BookingController.deleteBooking);
 
