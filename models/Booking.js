@@ -26,16 +26,7 @@ const bookingSchema = new mongoose.Schema({
         {
             title: String,
             description: String,
-            subtasks: [
-                {
-                    title: String,
-                    from: Date,
-                    to: Date,
-                    period: String,
-                    notes: String,
-                    status: Boolean,
-                },
-            ],
+            status: Boolean,
         },
     ],
 });

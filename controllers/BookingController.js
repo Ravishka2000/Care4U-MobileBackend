@@ -19,17 +19,19 @@ const createBooking = asyncHandler(async (req, res) => {
 
 const getBookings = asyncHandler(async (req, res) => {
     const bookings = await Booking.find({})
-        .populate('user')       // Populate the 'user' field
-        .populate('caretaker'); // Populate the 'caretaker' field
-
+        .populate('user')              // Populate the 'user' field
+        .populate('caretaker')         // Populate the 'caretaker' field
+        .populate('caretaker.user');   // Populate the 'user' field within the 'caretaker' subdocument
     res.json(bookings);
 });
+
 
 
 const getBookingById = asyncHandler(async (req, res) => {
     const booking = await Booking.findById(req.params.id)
         .populate('user')       // Populate the 'user' field
-        .populate('caretaker'); // Populate the 'caretaker' field
+        .populate('caretaker')
+        .populate('caretaker.user');
 
     if (booking) {
         res.json(booking);
