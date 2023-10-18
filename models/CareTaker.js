@@ -22,6 +22,12 @@ const caretakerSchema = new Schema({
     hourlyRate:{
         type: Number,
     },
+    bio: {
+        type: String,
+    },
+    image: {
+        type: String,
+    }
 });  
 
 const Caretaker = mongoose.model("Caretaker", caretakerSchema);

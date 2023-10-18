@@ -135,7 +135,7 @@ const getAllCaretakers = asyncHandler(async (req, res) => {
 
 // Update caretaker information
 const updateCaretaker = asyncHandler(async (req, res) => {
-    const { speciality, servicesOffered, hourlyRate } = req.body;
+    const { speciality, servicesOffered, hourlyRate, bio, image } = req.body;
 
     const caretaker = await Caretaker.findById(req.params.id);
 
@@ -143,6 +143,8 @@ const updateCaretaker = asyncHandler(async (req, res) => {
         caretaker.speciality = speciality;
         caretaker.servicesOffered = servicesOffered;
         caretaker.hourlyRate = hourlyRate;
+        caretaker.bio = bio;
+        caretaker.image = image;
 
         await caretaker.save();
         res.json({ message: "Caretaker updated successfully" });
