@@ -7,11 +7,6 @@ router.post('/:bookingId', TaskController.createTask);
 router.get('/:bookingId', TaskController.viewTasks);
 router.put('/:bookingId/tasks/:taskId', TaskController.updateTask);
 router.delete('/:bookingId/tasks/:taskId', TaskController.deleteTask);
-
-router.post('/:bookingId/subtasks/:taskId', TaskController.addSubTask);
-router.put('/:bookingId/subtasks/:taskId/:subtaskId', TaskController.updateSubTask);
-router.patch('/:bookingId/subtasks/:taskId/:subtaskId', TaskController.updateSubtaskStatus);
-router.delete('/:bookingId/subtasks/:taskId/:subtaskId', TaskController.deleteSubTask);
-
+router.put('/:bookingId/tasks/:taskId/toggle-status', TaskController.toggleTaskStatus);
 
 export default router;

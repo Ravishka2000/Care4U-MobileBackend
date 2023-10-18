@@ -18,6 +18,7 @@ const createTask = asyncHandler(async (req, res) => {
         const task = {
             title,
             description,
+            status: false,
         };
 
         // Add the task to the booking's tasks array
@@ -119,54 +120,9 @@ const deleteTask = asyncHandler(async (req, res) => {
     }
 });
 
-// Controller for updating the status of a subtask
-const updateSubtaskStatus = asyncHandler(async (req, res) => {
-    const { bookingId, taskId, subtaskId } = req.params;
-    const { status } = req.body;
 
-    try {
-        // Find the booking by ID
-        const booking = await Booking.findById(bookingId);
-
-        if (!booking) {
-            return res.status(404).json({ message: "Booking not found" });
-        }
-
-        // Find the task within the booking's tasks array
-        const task = booking.tasks.id(taskId);
-
-        if (!task) {
-            return res.status(404).json({ message: "Task not found" });
-        }
-
-        // Find the subtask within the task's subtasks array
-        const subtask = task.subtasks.id(subtaskId);
-
-        if (!subtask) {
-            return res.status(404).json({ message: "Subtask not found" });
-        }
-
-        // Update the status of the subtask
-        subtask.status = status;
-
-        // Save the updated booking
-        await booking.save();
-
-        res.status(200).json({
-            message: "Subtask status updated successfully",
-            subtask,
-        });
-    } catch (error) {
-        res.status(500).json({
-            message: "Error updating subtask status",
-            error: error.message,
-        });
-    }
-});
-
-const addSubTask = asyncHandler(async (req, res) => {
+const toggleTaskStatus = asyncHandler(async (req, res) => {
     const { bookingId, taskId } = req.params;
-    const { title, from, to, period, notes } = req.body;
 
     try {
         // Find the booking by ID
@@ -183,117 +139,25 @@ const addSubTask = asyncHandler(async (req, res) => {
             return res.status(404).json({ message: "Task not found" });
         }
 
-        // Create a new subtask
-        const newSubtask = {
-            title,
-            from,
-            to,
-            period,
-            notes,
-            status: false,
-        };
-
-        // Add the subtask to the task's subtasks array
-        task.subtasks.push(newSubtask);
+        // Toggle the status of the task (true to false, false to true)
+        task.status = !task.status;
 
         // Save the updated booking
         await booking.save();
 
-        res.status(201).json({ message: "Subtask added successfully", subtask: newSubtask });
+        res.status(200).json({ message: "Task status toggled successfully", task });
     } catch (error) {
         res.status(500).json({
-            message: "Error adding subtask",
+            message: "Error toggling task status",
             error: error.message,
         });
     }
 });
-
-const updateSubTask = asyncHandler(async (req, res) => {
-    const { bookingId, taskId, subtaskId } = req.params;
-    const { title, from, to, period, notes } = req.body;
-
-    try {
-        // Find the booking by ID
-        const booking = await Booking.findById(bookingId);
-
-        if (!booking) {
-            return res.status(404).json({ message: "Booking not found" });
-        }
-
-        // Find the task within the booking's tasks array
-        const task = booking.tasks.id(taskId);
-
-        if (!task) {
-            return res.status(404).json({ message: "Task not found" });
-        }
-
-        // Find the subtask within the task's subtasks array
-        const subtask = task.subtasks.id(subtaskId);
-
-        if (!subtask) {
-            return res.status(404).json({ message: "Subtask not found" });
-        }
-
-        // Update the subtask properties
-        subtask.title = title;
-        subtask.from = from;
-        subtask.to = to;
-        subtask.period = period;
-        subtask.notes = notes;
-
-        // Save the updated booking
-        await booking.save();
-
-        res.status(200).json({ message: "Subtask updated successfully", subtask });
-    } catch (error) {
-        res.status(500).json({
-            message: "Error updating subtask",
-            error: error.message,
-        });
-    }
-});
-
-const deleteSubTask = asyncHandler(async (req, res) => {
-    const { bookingId, taskId, subtaskId } = req.params;
-
-    try {
-        // Find the booking by ID
-        const booking = await Booking.findById(bookingId);
-
-        if (!booking) {
-            return res.status(404).json({ message: "Booking not found" });
-        }
-
-        // Find the task within the booking's tasks array
-        const task = booking.tasks.id(taskId);
-
-        if (!task) {
-            return res.status(404).json({ message: "Task not found" });
-        }
-
-        // Use filter to remove the subtask from the task's subtasks array
-        task.subtasks = task.subtasks.filter(subtask => subtask._id.toString() !== subtaskId);
-
-        // Save the updated booking
-        await booking.save();
-
-        res.status(200).json({ message: "Subtask deleted successfully" });
-    } catch (error) {
-        res.status(500).json({
-            message: "Error deleting subtask",
-            error: error.message,
-        });
-    }
-});
-
 
 export default {
     createTask,
     viewTasks,
     updateTask,
     deleteTask,
-    addSubTask,
-    updateSubTask,
-    deleteSubTask,
-    updateSubtaskStatus,
+    toggleTaskStatus,
 };
