@@ -72,7 +72,8 @@ const loginUser = asyncHandler(async (req, res) => {
         };
         const response = {
             message: "Login successful",
-            isCaretaker: user.isCaretaker // Assuming the user has an "isCaretaker" property
+            isCaretaker: user.isCaretaker,
+            userId: user._id
         };
 
         res.status(200).json(response);
