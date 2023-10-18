@@ -40,7 +40,9 @@ const userSchema = new Schema({
     isCaretaker:{
         type: Boolean
     },
-
+    token: {
+        type: String
+    }
 });  
 
 

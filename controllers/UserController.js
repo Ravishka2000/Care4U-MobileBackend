@@ -1,4 +1,6 @@
 import asyncHandler from "express-async-handler";
+import jwt from "jsonwebtoken";
+import crypto from "crypto";
 import User from "../models/User.js";
 import Caretaker from "../models/CareTaker.js";
 
@@ -58,6 +60,13 @@ const registerUser = asyncHandler(async (req, res) => {
     res.status(201).json({ message: "User registered successfully" });
 });
 
+const generateSecretKey = () => {
+    const secretKey = crypto.randomBytes(32).toString("hex");
+    return secretKey;
+};
+
+const secretKey = generateSecretKey();
+
 // Login user
 const loginUser = asyncHandler(async (req, res) => {
     const { email, password } = req.body;
@@ -70,10 +79,13 @@ const loginUser = asyncHandler(async (req, res) => {
             email: user.email,
             userName: user.userName,
         };
+        const token = jwt.sign({ userId: user._id }, secretKey);
+        user.token = token;
+        user.save();
         const response = {
             message: "Login successful",
             isCaretaker: user.isCaretaker,
-            userId: user._id
+            token: token
         };
 
         res.status(200).json(response);
