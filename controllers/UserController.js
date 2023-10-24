@@ -142,8 +142,19 @@ const getCaretaker = asyncHandler(async (req, res) => {
 
 // Get all caretakers
 const getAllCaretakers = asyncHandler(async (req, res) => {
-    const caretakers = await Caretaker.find({}).populate("user");
-    res.json(caretakers);
+    try {
+        let filter = {};
+        if (req.query.filter) {
+            // Apply filtering if the "filter" query parameter is provided
+            filter = { speciality: req.query.filter };
+        }
+
+        const caretakers = await Caretaker.find(filter).populate("user");
+        res.json(caretakers);
+    } catch (error) {
+        console.error("Failed to fetch caretakers:", error);
+        res.status(500).json({ error: "Internal Server Error" });
+    }
 });
 
 // Update caretaker information
