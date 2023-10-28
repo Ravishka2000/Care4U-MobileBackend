@@ -2,11 +2,12 @@ import asyncHandler from "express-async-handler";
 import Booking from "../models/Booking.js";
 
 const createBooking = asyncHandler(async (req, res) => {
-    const { user, caretaker, startDate, endDate } = req.body;
+    const { user, caretaker, startDate, endDate, title } = req.body;
 
     const booking = new Booking({
         user,
         caretaker,
+        title,
         startDate,
         endDate,
         status: "Pending", // Set the initial state to "Pending" here
@@ -43,13 +44,14 @@ const getBookingById = asyncHandler(async (req, res) => {
 
 
 const updateBooking = asyncHandler(async (req, res) => {
-    const { user, caretaker, startDate, endDate, status } = req.body;
+    const { user, caretaker, title, startDate, endDate, status } = req.body;
 
     const booking = await Booking.findById(req.params.id);
 
     if (booking) {
         booking.user = user || booking.user;
         booking.caretaker = caretaker || booking.caretaker;
+        booking.title = title || booking.title;
         booking.startDate = startDate || booking.startDate;
         booking.endDate = endDate || booking.endDate;
         booking.status = status || booking.status;

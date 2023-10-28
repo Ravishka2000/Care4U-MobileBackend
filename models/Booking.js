@@ -9,6 +9,9 @@ const bookingSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "Caretaker",
     },
+    title: {
+        type: String,
+    },
     startDate: {
         type: Date,
         required: true,
